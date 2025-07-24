@@ -17,9 +17,10 @@ A minimal RAG (Retrieval Augmented Generation) implementation for educational pu
    ```
 
 2. **Set up environment variables:**
-   - Copy `.env` and add your OpenAI API key:
+   - Copy `.env.example` to `.env` and add your OpenAI API key:
    ```bash
-   OPENAI_API_KEY=your_openai_api_key_here
+   cp .env.example .env
+   # Edit .env and add your OpenAI API key
    ```
 
 3. **Initialize the RAG database:**
