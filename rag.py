@@ -17,7 +17,7 @@ class RAGSystem:
         
         self.embeddings = OpenAIEmbeddings(
             openai_api_key=os.getenv("OPENAI_API_KEY"),
-            model="text-embedding-ada-002"
+            model=os.getenv("EMBEDDING_MODEL", "text-embedding-3-small")
         )
         
         self.client = chromadb.PersistentClient(path="./chroma_db")

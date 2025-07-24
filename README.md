@@ -75,9 +75,15 @@ setup.bat
 
 ### Configuration
 Adjust settings in `.env`:
+- `EMBEDDING_MODEL`: OpenAI embedding model to use (default: text-embedding-3-small)
 - `CHUNK_SIZE`: Size of text chunks (default: 1000)
 - `CHUNK_OVERLAP`: Overlap between chunks (default: 200)
 - `TOP_K_RESULTS`: Number of chunks to retrieve (default: 5)
+
+**Available embedding models:**
+- `text-embedding-3-small`: Efficient and cost-effective (recommended)
+- `text-embedding-3-large`: Best performance, higher cost
+- `text-embedding-ada-002`: Legacy model (still supported)
 
 ## Architecture
 
