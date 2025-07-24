@@ -271,7 +271,38 @@ def chat_with_ai(request: ChatRequest) -> ChatResponse:
 
 ## 高度なトピック
 
-### 1. 検索品質の向上
+### 1. 代替LLMプロバイダーの使用
+
+システムは設定を通じてOpenAI互換のAPIをサポートします：
+
+**Ollama（ローカルLLM）:**
+```bash
+OPENAI_BASE_URL=http://localhost:11434/v1
+LLM_MODEL=llama3.1  # または llama3, mistral など
+OPENAI_API_KEY=ollama  # 任意の値
+```
+
+**その他のプロバイダー:**
+```bash
+# Azure OpenAI
+OPENAI_BASE_URL=https://your-resource.openai.azure.com/
+LLM_MODEL=gpt-4.1
+
+# プロキシ経由のAnthropic
+OPENAI_BASE_URL=https://api.anthropic.com/v1
+LLM_MODEL=claude-3-sonnet
+
+# ローカル展開（vLLMなど）
+OPENAI_BASE_URL=http://localhost:8000/v1
+LLM_MODEL=your-local-model
+```
+
+**重要な考慮事項:**
+- 関数呼び出しサポートはプロバイダーによって異なる
+- 一部のモデルはシステムプロンプトの調整が必要
+- 埋め込みモデルは現在OpenAI APIが必要
+
+### 2. 検索品質の向上
 
 **実装されていないが検討価値のある技術:**
 
@@ -324,9 +355,13 @@ def chat_with_ai(request: ChatRequest) -> ChatResponse:
 ### 環境変数
 
 ```bash
-# OpenAI設定
+# LLM設定
 OPENAI_API_KEY=your_api_key_here
-EMBEDDING_MODEL=text-embedding-3-small  # または text-embedding-3-large
+OPENAI_BASE_URL=                        # OpenAIの場合は空、他のプロバイダーの場合は設定
+LLM_MODEL=gpt-4.1-mini                  # 使用する言語モデル
+
+# 埋め込み設定
+EMBEDDING_MODEL=text-embedding-3-small  # ベクトル検索用埋め込みモデル
 
 # RAG設定
 CHUNK_SIZE=1000          # チャンクあたりの文字数

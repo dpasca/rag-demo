@@ -88,7 +88,7 @@ setup.bat
 - `TOP_K_RESULTS`: 検索結果として返すチャンク数（デフォルト: 5）
 
 **利用可能なモデル:**
-- **LLMモデル**: `gpt-4.1-mini`, `gpt-4o`, `gpt-4`、またはOpenAI互換モデル
+- **LLMモデル**: `gpt-4.1-mini`, `gpt-4.1`、またはOpenAI互換モデル
 - **埋め込みモデル**: `text-embedding-3-small`, `text-embedding-3-large`, `text-embedding-ada-002`
 
 **他プロバイダーとの使用:**

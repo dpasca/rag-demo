@@ -278,7 +278,7 @@ The system supports any OpenAI-compatible API through configuration:
 **Ollama (Local LLMs):**
 ```bash
 OPENAI_BASE_URL=http://localhost:11434/v1
-LLM_MODEL=llama2  # or llama3, mistral, etc.
+LLM_MODEL=llama3.1  # or llama3, mistral, etc.
 OPENAI_API_KEY=ollama  # Can be any value
 ```
 
@@ -286,13 +286,13 @@ OPENAI_API_KEY=ollama  # Can be any value
 ```bash
 # Azure OpenAI
 OPENAI_BASE_URL=https://your-resource.openai.azure.com/
-LLM_MODEL=gpt-4
+LLM_MODEL=gpt-4.1
 
 # Anthropic via proxy
 OPENAI_BASE_URL=https://api.anthropic.com/v1
 LLM_MODEL=claude-3-sonnet
 
-# Local deployment (vLLM, text-generation-webui, etc.)
+# Local deployment (vLLM, etc.)
 OPENAI_BASE_URL=http://localhost:8000/v1
 LLM_MODEL=your-local-model
 ```

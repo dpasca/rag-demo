@@ -88,7 +88,7 @@ Adjust settings in `.env`:
 - `TOP_K_RESULTS`: Number of chunks to retrieve (default: 5)
 
 **Available models:**
-- **LLM Models**: `gpt-4.1-mini`, `gpt-4o`, `gpt-4`, or any OpenAI-compatible model
+- **LLM Models**: `gpt-4.1-mini`, `gpt-4.1`, or any OpenAI-compatible model
 - **Embedding Models**: `text-embedding-3-small`, `text-embedding-3-large`, `text-embedding-ada-002`
 
 **Using with other providers:**
