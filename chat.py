@@ -51,7 +51,7 @@ def chat_with_ai(request: ChatRequest) -> ChatResponse:
     # Add system message
     messages.append({
         "role": "system",
-        "content": "You are a helpful assistant with access to a document knowledge base. Use the search_documents tool when you need to find information from the documents to answer user questions."
+        "content": "You are a helpful assistant with access to a document knowledge base. Always use the search_documents tool first to check if there is relevant information in the documents before answering any question. This helps ensure you provide accurate and complete responses based on the available knowledge."
     })
     
     # Add conversation history
