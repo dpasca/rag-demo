@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Demo - AI Assistant</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 RAG Demo</h1>
+            <p>AI Assistant with Document Knowledge Base</p>
+        </header>
+
+        <div class="chat-container">
+            <div id="chat-messages" class="chat-messages">
+                <div class="message assistant-message">
+                    <div class="message-content">
+                        <strong>Assistant:</strong> Hello! I'm your AI assistant with access to a document knowledge base. Ask me anything!
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-container">
+                <input type="text" id="user-input" placeholder="Type your message here..." autocomplete="off">
+                <button id="send-button">Send</button>
+            </div>
+        </div>
+
+        <div class="status" id="status"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

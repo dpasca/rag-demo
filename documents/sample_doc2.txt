@@ -1,0 +1,36 @@
+Python Programming Guide
+
+Python is a high-level, interpreted programming language known for its simplicity and readability. It was created by Guido van Rossum and first released in 1991.
+
+Key Features of Python:
+- Easy to learn and use
+- Interpreted language (no compilation needed)
+- Object-oriented programming support
+- Extensive standard library
+- Large community and ecosystem
+- Cross-platform compatibility
+
+Python Data Types:
+1. Numbers: int, float, complex
+2. Strings: Sequences of characters
+3. Lists: Ordered, mutable collections
+4. Tuples: Ordered, immutable collections
+5. Dictionaries: Key-value pairs
+6. Sets: Unordered collections of unique elements
+
+Control Structures:
+- if/elif/else statements for conditional execution
+- for loops for iteration over sequences
+- while loops for repeated execution based on conditions
+- try/except blocks for error handling
+
+Functions in Python:
+Functions are defined using the 'def' keyword and can accept parameters and return values. Python supports first-class functions, meaning functions can be assigned to variables, passed as arguments, and returned from other functions.
+
+Popular Python libraries:
+- NumPy: Numerical computing
+- Pandas: Data manipulation and analysis
+- Matplotlib: Data visualization
+- Scikit-learn: Machine learning
+- Django/Flask: Web development
+- Requests: HTTP library

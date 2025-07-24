@@ -1,0 +1,47 @@
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+from models import ChatRequest, ChatResponse
+from chat import chat_with_ai
+import os
+
+app = FastAPI(title="RAG Demo", description="Educational RAG implementation with GPT-4.1-mini")
+
+# Enable CORS for frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Serve static files (frontend)
+if os.path.exists("frontend"):
+    app.mount("/static", StaticFiles(directory="frontend"), name="static")
+
+@app.get("/")
+async def read_root():
+    """Serve the frontend HTML file."""
+    if os.path.exists("frontend/index.html"):
+        return FileResponse("frontend/index.html")
+    return {"message": "RAG Demo API is running! Frontend not found - please create frontend/index.html"}
+
+@app.post("/chat", response_model=ChatResponse)
+async def chat_endpoint(request: ChatRequest):
+    """Handle chat requests with RAG integration."""
+    try:
+        response = chat_with_ai(request)
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Chat error: {str(e)}")
+
+@app.get("/health")
+async def health_check():
+    """Health check endpoint."""
+    return {"status": "healthy", "message": "RAG Demo API is running"}
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
