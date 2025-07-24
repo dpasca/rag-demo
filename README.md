@@ -9,7 +9,18 @@ A minimal RAG (Retrieval Augmented Generation) implementation for educational pu
 - 🎨 Simple HTML/CSS/JS frontend
 - 🔧 GPT-4.1-mini integration
 
-## Setup
+## Quick Setup
+
+**Option 1: Automated Setup (Recommended)**
+```bash
+# Linux/Mac
+./setup.sh
+
+# Windows
+setup.bat
+```
+
+**Option 2: Manual Setup**
 
 1. **Create and activate a virtual environment:**
    ```bash
@@ -47,6 +58,8 @@ A minimal RAG (Retrieval Augmented Generation) implementation for educational pu
 
 6. **Open your browser:**
    Navigate to `http://localhost:8000`
+
+> **Note**: The automated setup script will create the virtual environment, install dependencies, and set up the `.env` file for you. You'll just need to add your OpenAI API key to the `.env` file.
 
 ## Usage
 
