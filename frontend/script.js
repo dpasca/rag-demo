@@ -65,9 +65,12 @@ class ChatApp {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${role}-message`;
 
+        // Convert newlines to <br> tags for proper formatting
+        const formattedContent = content.replace(/\n/g, '<br>');
+        
         let messageHTML = `
             <div class="message-content">
-                <strong>${role === 'user' ? 'You' : 'Assistant'}:</strong> ${content}
+                <strong>${role === 'user' ? 'You' : 'Assistant'}:</strong> ${formattedContent}
             </div>
         `;
 
