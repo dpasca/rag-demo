@@ -109,6 +109,17 @@ Adjust settings in `.env`:
 - **Local storage**: ChromaDB runs locally with persistent storage
 - **Educational focus**: Clean, readable code with minimal complexity
 
+## Technical Details
+
+For detailed technical documentation about the RAG implementation, see [TECHNICAL.md](TECHNICAL.md). It covers implementation details, design decisions, and how to extend the system.
+
+## Languages
+
+- [English README](README.md)
+- [日本語 README](README_ja.md)
+- [English Technical Docs](TECHNICAL.md)
+- [日本語技術ドキュメント](TECHNICAL_ja.md)
+
 ## Development
 
 ### Alternative Setup with uv (Advanced)
