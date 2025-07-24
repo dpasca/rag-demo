@@ -11,29 +11,41 @@ A minimal RAG (Retrieval Augmented Generation) implementation for educational pu
 
 ## Setup
 
-1. **Install dependencies:**
+1. **Create and activate a virtual environment:**
+   ```bash
+   # Create virtual environment
+   python -m venv venv
+   
+   # Activate virtual environment
+   # On Linux/Mac:
+   source venv/bin/activate
+   # On Windows:
+   venv\Scripts\activate
+   ```
+
+2. **Install dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
 
-2. **Set up environment variables:**
+3. **Set up environment variables:**
    - Copy `.env.example` to `.env` and add your OpenAI API key:
    ```bash
    cp .env.example .env
    # Edit .env and add your OpenAI API key
    ```
 
-3. **Initialize the RAG database:**
+4. **Initialize the RAG database:**
    ```bash
    python update_rag.py
    ```
 
-4. **Start the server:**
+5. **Start the server:**
    ```bash
    python main.py
    ```
 
-5. **Open your browser:**
+6. **Open your browser:**
    Navigate to `http://localhost:8000`
 
 ## Usage
@@ -77,3 +89,20 @@ Adjust settings in `.env`:
 - **Configurable chunking**: Adjust chunk size and overlap via environment variables
 - **Local storage**: ChromaDB runs locally with persistent storage
 - **Educational focus**: Clean, readable code with minimal complexity
+
+## Development
+
+### Alternative Setup with uv (Advanced)
+For faster dependency management, you can use [uv](https://github.com/astral-sh/uv):
+```bash
+# Install uv if you haven't already
+pip install uv
+
+# Create and activate virtual environment
+uv venv
+source .venv/bin/activate  # Linux/Mac
+# .venv\Scripts\activate     # Windows
+
+# Install dependencies
+uv pip install -r requirements.txt
+```
