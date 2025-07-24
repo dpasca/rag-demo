@@ -79,7 +79,7 @@ Adjust settings in `.env`:
 **LLM Configuration:**
 - `OPENAI_API_KEY`: Your OpenAI API key (required)
 - `OPENAI_BASE_URL`: API base URL (leave empty for OpenAI, set for other providers)
-- `LLM_MODEL`: Language model to use (default: gpt-4o-mini)
+- `LLM_MODEL`: Language model to use (default: gpt-4.1-mini)
 
 **RAG Configuration:**
 - `EMBEDDING_MODEL`: OpenAI embedding model to use (default: text-embedding-3-small)
@@ -88,7 +88,7 @@ Adjust settings in `.env`:
 - `TOP_K_RESULTS`: Number of chunks to retrieve (default: 5)
 
 **Available models:**
-- **LLM Models**: `gpt-4o-mini`, `gpt-4o`, `gpt-3.5-turbo`, or any OpenAI-compatible model
+- **LLM Models**: `gpt-4.1-mini`, `gpt-4o`, `gpt-4`, or any OpenAI-compatible model
 - **Embedding Models**: `text-embedding-3-small`, `text-embedding-3-large`, `text-embedding-ada-002`
 
 **Using with other providers:**

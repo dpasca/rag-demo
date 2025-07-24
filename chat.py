@@ -66,7 +66,7 @@ def chat_with_ai(request: ChatRequest) -> ChatResponse:
 
     # Call OpenAI with tool capability
     response = client.chat.completions.create(
-        model=os.getenv("LLM_MODEL", "gpt-4o-mini"),
+        model=os.getenv("LLM_MODEL", "gpt-4.1-mini"),
         messages=messages,
         tools=[RAG_TOOL],
         tool_choice="auto"
@@ -105,7 +105,7 @@ def chat_with_ai(request: ChatRequest) -> ChatResponse:
 
                 # Get final response
                 final_response = client.chat.completions.create(
-                    model=os.getenv("LLM_MODEL", "gpt-4o-mini"),
+                    model=os.getenv("LLM_MODEL", "gpt-4.1-mini"),
                     messages=messages
                 )
 

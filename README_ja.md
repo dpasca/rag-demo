@@ -79,7 +79,7 @@ setup.bat
 **LLM設定:**
 - `OPENAI_API_KEY`: OpenAI APIキー（必須）
 - `OPENAI_BASE_URL`: API ベースURL（OpenAIの場合は空、他プロバイダーの場合は設定）
-- `LLM_MODEL`: 使用する言語モデル（デフォルト: gpt-4o-mini）
+- `LLM_MODEL`: 使用する言語モデル（デフォルト: gpt-4.1-mini）
 
 **RAG設定:**
 - `EMBEDDING_MODEL`: 使用するOpenAI埋め込みモデル（デフォルト: text-embedding-3-small）
@@ -88,7 +88,7 @@ setup.bat
 - `TOP_K_RESULTS`: 検索結果として返すチャンク数（デフォルト: 5）
 
 **利用可能なモデル:**
-- **LLMモデル**: `gpt-4o-mini`, `gpt-4o`, `gpt-3.5-turbo`、またはOpenAI互換モデル
+- **LLMモデル**: `gpt-4.1-mini`, `gpt-4o`, `gpt-4`、またはOpenAI互換モデル
 - **埋め込みモデル**: `text-embedding-3-small`, `text-embedding-3-large`, `text-embedding-ada-002`
 
 **他プロバイダーとの使用:**

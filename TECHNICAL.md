@@ -358,7 +358,7 @@ LLM_MODEL=your-local-model
 # LLM Configuration
 OPENAI_API_KEY=your_api_key_here
 OPENAI_BASE_URL=                        # Leave empty for OpenAI, set for other providers
-LLM_MODEL=gpt-4o-mini                   # Language model to use
+LLM_MODEL=gpt-4.1-mini                  # Language model to use
 
 # Embedding Configuration
 EMBEDDING_MODEL=text-embedding-3-small  # Embedding model for vector search
