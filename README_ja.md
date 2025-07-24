@@ -7,7 +7,7 @@
 - 📚 ChromaDBベクトルデータベース
 - ⚡ FastAPIバックエンド
 - 🎨 シンプルなHTML/CSS/JSフロントエンド
-- 🔧 GPT-4.1-mini統合
+- 🔧 GPT-4.1 Mini統合
 
 ## クイックセットアップ
 
@@ -26,7 +26,7 @@ setup.bat
    ```bash
    # 仮想環境を作成
    python -m venv venv
-   
+
    # 仮想環境をアクティベート
    # Linux/Mac:
    source venv/bin/activate

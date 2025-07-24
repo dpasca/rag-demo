@@ -1,4 +1,4 @@
-# RAG Demo - Educational Implementation
+# RAG Demo - Minimal Implementation
 
 A minimal RAG (Retrieval Augmented Generation) implementation for educational purposes, featuring:
 
@@ -7,7 +7,7 @@ A minimal RAG (Retrieval Augmented Generation) implementation for educational pu
 - 📚 ChromaDB vector database
 - ⚡ FastAPI backend
 - 🎨 Simple HTML/CSS/JS frontend
-- 🔧 GPT-4.1-mini integration
+- 🔧 GPT-4.1 Mini integration
 
 ## Quick Setup
 
@@ -26,7 +26,7 @@ setup.bat
    ```bash
    # Create virtual environment
    python -m venv venv
-   
+
    # Activate virtual environment
    # On Linux/Mac:
    source venv/bin/activate

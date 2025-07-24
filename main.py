@@ -6,7 +6,7 @@ from models import ChatRequest, ChatResponse
 from chat import chat_with_ai
 import os
 
-app = FastAPI(title="RAG Demo", description="Educational RAG implementation with GPT-4.1-mini")
+app = FastAPI(title="RAG Demo", description="Minimal RAG implementation")
 
 # Enable CORS for frontend
 app.add_middleware(

@@ -15,7 +15,7 @@ This document provides a detailed technical explanation of how the RAG (Retrieva
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   Frontend      │    │   FastAPI       │    │   OpenAI API    │
-│   (HTML/CSS/JS) │◄──►│   Backend       │◄──►│   (GPT-4.1-mini)│
+│   (HTML/CSS/JS) │◄──►│   Backend       │◄──►│   (GPT-4.1 Mini)│
 └─────────────────┘    └─────────────────┘    └─────────────────┘
                               │
                               ▼
@@ -134,16 +134,16 @@ def add_documents(self, documents_dir: str = "documents"):
     all_items = self.collection.get()
     if all_items['ids']:
         self.collection.delete(ids=all_items['ids'])
-    
+
     # 2. Process each .txt file
     for filename in os.listdir(documents_dir):
         if filename.endswith('.txt'):
             with open(filepath, 'r', encoding='utf-8') as file:
                 content = file.read()
-            
+
             # 3. Split into chunks
             chunks = self.text_splitter.split_text(content)
-            
+
             # 4. Create metadata for each chunk
             for i, chunk in enumerate(chunks):
                 all_chunks.append(chunk)
@@ -151,7 +151,7 @@ def add_documents(self, documents_dir: str = "documents"):
                     "filename": filename,
                     "chunk_index": i
                 })
-    
+
     # 5. Generate embeddings and store
     embeddings = self.embeddings.embed_documents(all_chunks)
     self.collection.add(
@@ -168,13 +168,13 @@ def add_documents(self, documents_dir: str = "documents"):
 def query(self, query: str, top_k: int = None) -> List[RAGChunk]:
     # 1. Convert query to embedding
     query_embedding = self.embeddings.embed_query(query)
-    
+
     # 2. Search for similar vectors
     results = self.collection.query(
         query_embeddings=[query_embedding],
         n_results=top_k or self.top_k
     )
-    
+
     # 3. Convert results to structured format
     chunks = []
     for i, doc in enumerate(results['documents'][0]):
@@ -184,7 +184,7 @@ def query(self, query: str, top_k: int = None) -> List[RAGChunk]:
             filename=metadata['filename'],
             chunk_index=metadata['chunk_index']
         ))
-    
+
     return chunks
 ```
 
@@ -194,7 +194,7 @@ def query(self, query: str, top_k: int = None) -> List[RAGChunk]:
 def chat_with_ai(request: ChatRequest) -> ChatResponse:
     # 1. Prepare conversation with system prompt
     messages = [...]
-    
+
     # 2. Call OpenAI with tool capability
     response = client.chat.completions.create(
         model="gpt-4.1-mini",
@@ -202,7 +202,7 @@ def chat_with_ai(request: ChatRequest) -> ChatResponse:
         tools=[RAG_TOOL],
         tool_choice="auto"
     )
-    
+
     # 3. Handle tool calls
     if message.tool_calls:
         for tool_call in message.tool_calls:
@@ -210,14 +210,14 @@ def chat_with_ai(request: ChatRequest) -> ChatResponse:
                 # Execute RAG search
                 chunks = rag_system.query(query)
                 function_result = search_documents(query)
-                
+
                 # Continue conversation with results
                 messages.append(...)  # Tool call
                 messages.append(...)  # Tool result
-                
+
                 # Get final response
                 final_response = client.chat.completions.create(...)
-    
+
     return ChatResponse(...)
 ```
 
@@ -336,7 +336,7 @@ TOP_K_RESULTS=5          # Number of chunks to retrieve
 
 ### Tuning Parameters
 
-1. **Chunk Size**: 
+1. **Chunk Size**:
    - Smaller (500): More precise, may lose context
    - Larger (2000): More context, may be less precise
 
@@ -353,6 +353,7 @@ TOP_K_RESULTS=5          # Number of chunks to retrieve
 ### 1. Poor Retrieval Quality
 
 **Symptoms**: Irrelevant chunks returned
+
 **Solutions**:
 - Adjust chunk size and overlap
 - Improve document preprocessing
@@ -362,6 +363,7 @@ TOP_K_RESULTS=5          # Number of chunks to retrieve
 ### 2. Slow Performance
 
 **Symptoms**: Long response times
+
 **Solutions**:
 - Reduce Top-K results
 - Optimize vector database configuration
@@ -371,6 +373,7 @@ TOP_K_RESULTS=5          # Number of chunks to retrieve
 ### 3. RAG Not Triggering
 
 **Symptoms**: AI doesn't use search tool
+
 **Solutions**:
 - Improve system prompt
 - Add examples in few-shot prompting

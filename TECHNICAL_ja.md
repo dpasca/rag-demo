@@ -134,16 +134,16 @@ def add_documents(self, documents_dir: str = "documents"):
     all_items = self.collection.get()
     if all_items['ids']:
         self.collection.delete(ids=all_items['ids'])
-    
+
     # 2. 各.txtファイルを処理
     for filename in os.listdir(documents_dir):
         if filename.endswith('.txt'):
             with open(filepath, 'r', encoding='utf-8') as file:
                 content = file.read()
-            
+
             # 3. チャンクに分割
             chunks = self.text_splitter.split_text(content)
-            
+
             # 4. 各チャンクのメタデータを作成
             for i, chunk in enumerate(chunks):
                 all_chunks.append(chunk)
@@ -151,7 +151,7 @@ def add_documents(self, documents_dir: str = "documents"):
                     "filename": filename,
                     "chunk_index": i
                 })
-    
+
     # 5. 埋め込みを生成して保存
     embeddings = self.embeddings.embed_documents(all_chunks)
     self.collection.add(
@@ -168,13 +168,13 @@ def add_documents(self, documents_dir: str = "documents"):
 def query(self, query: str, top_k: int = None) -> List[RAGChunk]:
     # 1. クエリを埋め込みに変換
     query_embedding = self.embeddings.embed_query(query)
-    
+
     # 2. 類似ベクトルを検索
     results = self.collection.query(
         query_embeddings=[query_embedding],
         n_results=top_k or self.top_k
     )
-    
+
     # 3. 結果を構造化形式に変換
     chunks = []
     for i, doc in enumerate(results['documents'][0]):
@@ -184,7 +184,7 @@ def query(self, query: str, top_k: int = None) -> List[RAGChunk]:
             filename=metadata['filename'],
             chunk_index=metadata['chunk_index']
         ))
-    
+
     return chunks
 ```
 
@@ -194,7 +194,7 @@ def query(self, query: str, top_k: int = None) -> List[RAGChunk]:
 def chat_with_ai(request: ChatRequest) -> ChatResponse:
     # 1. システムプロンプトと会話を準備
     messages = [...]
-    
+
     # 2. ツール機能付きでOpenAIを呼び出し
     response = client.chat.completions.create(
         model="gpt-4.1-mini",
@@ -202,7 +202,7 @@ def chat_with_ai(request: ChatRequest) -> ChatResponse:
         tools=[RAG_TOOL],
         tool_choice="auto"
     )
-    
+
     # 3. ツール呼び出しを処理
     if message.tool_calls:
         for tool_call in message.tool_calls:
@@ -210,14 +210,14 @@ def chat_with_ai(request: ChatRequest) -> ChatResponse:
                 # RAG検索を実行
                 chunks = rag_system.query(query)
                 function_result = search_documents(query)
-                
+
                 # 結果と共に会話を継続
                 messages.append(...)  # ツール呼び出し
                 messages.append(...)  # ツール結果
-                
+
                 # 最終応答を取得
                 final_response = client.chat.completions.create(...)
-    
+
     return ChatResponse(...)
 ```
 
@@ -336,7 +336,7 @@ TOP_K_RESULTS=5          # 検索するチャンク数
 
 ### チューニングパラメータ
 
-1. **チャンクサイズ**: 
+1. **チャンクサイズ**:
    - 小さい（500）: より精密、コンテキスト不足の可能性
    - 大きい（2000）: より多くのコンテキスト、精度低下の可能性
 
@@ -353,6 +353,7 @@ TOP_K_RESULTS=5          # 検索するチャンク数
 ### 1. 検索品質不良
 
 **症状**: 関連性のないチャンクが返される
+
 **解決策**:
 - チャンクサイズとオーバーラップを調整
 - ドキュメント前処理を改善
@@ -362,6 +363,7 @@ TOP_K_RESULTS=5          # 検索するチャンク数
 ### 2. 性能低下
 
 **症状**: 応答時間が長い
+
 **解決策**:
 - トップK結果を削減
 - ベクトルデータベースconfig最適化
@@ -371,6 +373,7 @@ TOP_K_RESULTS=5          # 検索するチャンク数
 ### 3. RAGがトリガーされない
 
 **症状**: AIが検索ツールを使用しない
+
 **解決策**:
 - システムプロンプトを改善
 - few-shotプロンプティングで例を追加

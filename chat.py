@@ -13,14 +13,14 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 def search_documents(query: str) -> str:
     """Tool function for RAG search that can be called by the AI."""
     chunks = rag_system.query(query)
-    
+
     if not chunks:
         return "No relevant documents found."
-    
+
     result = f"Found {len(chunks)} relevant document chunks:\n\n"
     for i, chunk in enumerate(chunks, 1):
         result += f"**Source {i} ({chunk.filename}, chunk {chunk.chunk_index}):**\n{chunk.content}\n\n"
-    
+
     return result
 
 # Tool definition for OpenAI function calling
@@ -44,23 +44,23 @@ RAG_TOOL = {
 
 def chat_with_ai(request: ChatRequest) -> ChatResponse:
     """Handle chat request with RAG integration via tool calling."""
-    
+
     # Prepare messages for OpenAI
     messages = []
-    
+
     # Add system message
     messages.append({
         "role": "system",
         "content": "You are a helpful assistant with access to a document knowledge base. Always use the search_documents tool first to check if there is relevant information in the documents before answering any question. This helps ensure you provide accurate and complete responses based on the available knowledge."
     })
-    
+
     # Add conversation history
     for msg in request.conversation_history:
         messages.append({"role": msg.role, "content": msg.content})
-    
+
     # Add current user message
     messages.append({"role": "user", "content": request.message})
-    
+
     # Call OpenAI with tool capability
     response = client.chat.completions.create(
         model="gpt-4.1-mini",
@@ -68,11 +68,11 @@ def chat_with_ai(request: ChatRequest) -> ChatResponse:
         tools=[RAG_TOOL],
         tool_choice="auto"
     )
-    
+
     message = response.choices[0].message
     rag_used = False
     rag_sources = None
-    
+
     # Handle tool calls
     if message.tool_calls:
         for tool_call in message.tool_calls:
@@ -80,14 +80,14 @@ def chat_with_ai(request: ChatRequest) -> ChatResponse:
                 rag_used = True
                 function_args = json.loads(tool_call.function.arguments)
                 query = function_args["query"]
-                
+
                 # Get RAG results
                 chunks = rag_system.query(query)
                 rag_sources = chunks
-                
+
                 # Call the function
                 function_result = search_documents(query)
-                
+
                 # Add function result to messages and get final response
                 messages.append({
                     "role": "assistant",
@@ -99,19 +99,19 @@ def chat_with_ai(request: ChatRequest) -> ChatResponse:
                     "tool_call_id": tool_call.id,
                     "content": function_result
                 })
-                
+
                 # Get final response
                 final_response = client.chat.completions.create(
                     model="gpt-4.1-mini",
                     messages=messages
                 )
-                
+
                 return ChatResponse(
                     message=final_response.choices[0].message.content,
                     rag_used=rag_used,
                     rag_sources=rag_sources
                 )
-    
+
     return ChatResponse(
         message=message.content,
         rag_used=rag_used,
