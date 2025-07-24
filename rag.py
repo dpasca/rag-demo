@@ -39,7 +39,14 @@ class RAGSystem:
             return
         
         # Clear existing documents
-        self.collection.delete(where={})
+        try:
+            # Get all IDs and delete them
+            all_items = self.collection.get()
+            if all_items['ids']:
+                self.collection.delete(ids=all_items['ids'])
+        except Exception:
+            # If collection is empty or doesn't exist, continue
+            pass
         
         all_chunks = []
         all_metadatas = []
