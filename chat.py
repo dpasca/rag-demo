@@ -8,7 +8,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = OpenAI(
+    api_key=os.getenv("OPENAI_API_KEY"),
+    base_url=os.getenv("OPENAI_BASE_URL")  # None means use OpenAI's default
+)
 
 def search_documents(query: str) -> str:
     """Tool function for RAG search that can be called by the AI."""
@@ -63,7 +66,7 @@ def chat_with_ai(request: ChatRequest) -> ChatResponse:
 
     # Call OpenAI with tool capability
     response = client.chat.completions.create(
-        model="gpt-4.1-mini",
+        model=os.getenv("LLM_MODEL", "gpt-4o-mini"),
         messages=messages,
         tools=[RAG_TOOL],
         tool_choice="auto"
@@ -102,7 +105,7 @@ def chat_with_ai(request: ChatRequest) -> ChatResponse:
 
                 # Get final response
                 final_response = client.chat.completions.create(
-                    model="gpt-4.1-mini",
+                    model=os.getenv("LLM_MODEL", "gpt-4o-mini"),
                     messages=messages
                 )
 

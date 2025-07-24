@@ -75,15 +75,34 @@ setup.bat
 
 ### Configuration
 Adjust settings in `.env`:
+
+**LLM Configuration:**
+- `OPENAI_API_KEY`: Your OpenAI API key (required)
+- `OPENAI_BASE_URL`: API base URL (leave empty for OpenAI, set for other providers)
+- `LLM_MODEL`: Language model to use (default: gpt-4o-mini)
+
+**RAG Configuration:**
 - `EMBEDDING_MODEL`: OpenAI embedding model to use (default: text-embedding-3-small)
 - `CHUNK_SIZE`: Size of text chunks (default: 1000)
 - `CHUNK_OVERLAP`: Overlap between chunks (default: 200)
 - `TOP_K_RESULTS`: Number of chunks to retrieve (default: 5)
 
-**Available embedding models:**
-- `text-embedding-3-small`: Efficient and cost-effective (recommended)
-- `text-embedding-3-large`: Best performance, higher cost
-- `text-embedding-ada-002`: Legacy model (still supported)
+**Available models:**
+- **LLM Models**: `gpt-4o-mini`, `gpt-4o`, `gpt-3.5-turbo`, or any OpenAI-compatible model
+- **Embedding Models**: `text-embedding-3-small`, `text-embedding-3-large`, `text-embedding-ada-002`
+
+**Using with other providers:**
+```bash
+# For Ollama (local)
+OPENAI_BASE_URL=http://localhost:11434/v1
+LLM_MODEL=llama2
+OPENAI_API_KEY=ollama  # Can be anything for Ollama
+
+# For other OpenAI-compatible APIs
+OPENAI_BASE_URL=https://your-provider.com/v1
+LLM_MODEL=your-model-name
+OPENAI_API_KEY=your-api-key
+```
 
 ## Architecture
 

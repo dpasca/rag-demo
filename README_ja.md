@@ -75,15 +75,34 @@ setup.bat
 
 ### 構成設定
 `.env`で設定を調整:
+
+**LLM設定:**
+- `OPENAI_API_KEY`: OpenAI APIキー（必須）
+- `OPENAI_BASE_URL`: API ベースURL（OpenAIの場合は空、他プロバイダーの場合は設定）
+- `LLM_MODEL`: 使用する言語モデル（デフォルト: gpt-4o-mini）
+
+**RAG設定:**
 - `EMBEDDING_MODEL`: 使用するOpenAI埋め込みモデル（デフォルト: text-embedding-3-small）
 - `CHUNK_SIZE`: テキストチャンクのサイズ（デフォルト: 1000）
 - `CHUNK_OVERLAP`: チャンク間のオーバーラップ（デフォルト: 200）
 - `TOP_K_RESULTS`: 検索結果として返すチャンク数（デフォルト: 5）
 
-**利用可能な埋め込みモデル:**
-- `text-embedding-3-small`: 効率的でコスト効果的（推奨）
-- `text-embedding-3-large`: 最高性能、高コスト
-- `text-embedding-ada-002`: レガシーモデル（サポート継続）
+**利用可能なモデル:**
+- **LLMモデル**: `gpt-4o-mini`, `gpt-4o`, `gpt-3.5-turbo`、またはOpenAI互換モデル
+- **埋め込みモデル**: `text-embedding-3-small`, `text-embedding-3-large`, `text-embedding-ada-002`
+
+**他プロバイダーとの使用:**
+```bash
+# Ollama（ローカル）の場合
+OPENAI_BASE_URL=http://localhost:11434/v1
+LLM_MODEL=llama2
+OPENAI_API_KEY=ollama  # Ollamaの場合は任意の値
+
+# 他のOpenAI互換APIの場合
+OPENAI_BASE_URL=https://your-provider.com/v1
+LLM_MODEL=your-model-name
+OPENAI_API_KEY=your-api-key
+```
 
 ## アーキテクチャ
 

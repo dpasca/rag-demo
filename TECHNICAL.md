@@ -271,7 +271,38 @@ def chat_with_ai(request: ChatRequest) -> ChatResponse:
 
 ## Advanced Topics
 
-### 1. Improving Retrieval Quality
+### 1. Using Alternative LLM Providers
+
+The system supports any OpenAI-compatible API through configuration:
+
+**Ollama (Local LLMs):**
+```bash
+OPENAI_BASE_URL=http://localhost:11434/v1
+LLM_MODEL=llama2  # or llama3, mistral, etc.
+OPENAI_API_KEY=ollama  # Can be any value
+```
+
+**Other Providers:**
+```bash
+# Azure OpenAI
+OPENAI_BASE_URL=https://your-resource.openai.azure.com/
+LLM_MODEL=gpt-4
+
+# Anthropic via proxy
+OPENAI_BASE_URL=https://api.anthropic.com/v1
+LLM_MODEL=claude-3-sonnet
+
+# Local deployment (vLLM, text-generation-webui, etc.)
+OPENAI_BASE_URL=http://localhost:8000/v1
+LLM_MODEL=your-local-model
+```
+
+**Important considerations:**
+- Function calling support varies by provider
+- Some models may need adjusted system prompts
+- Embedding models still require OpenAI API for now
+
+### 2. Improving Retrieval Quality
 
 **Techniques not implemented but worth considering:**
 
@@ -280,7 +311,7 @@ def chat_with_ai(request: ChatRequest) -> ChatResponse:
 3. **Query Expansion**: Expand user queries with synonyms/related terms
 4. **Metadata Filtering**: Filter by document type, date, etc.
 
-### 2. Scaling Considerations
+### 3. Scaling Considerations
 
 **Current limitations and solutions:**
 
@@ -291,7 +322,7 @@ def chat_with_ai(request: ChatRequest) -> ChatResponse:
 3. **Document Updates**: Full rebuild on updates
    - Solution: Incremental updates with document versioning
 
-### 3. Evaluation and Monitoring
+### 4. Evaluation and Monitoring
 
 **Metrics to track in production:**
 
@@ -310,7 +341,7 @@ def chat_with_ai(request: ChatRequest) -> ChatResponse:
    - Embedding generation time
    - Vector search performance
 
-### 4. Security Considerations
+### 5. Security Considerations
 
 **Important for production:**
 
@@ -324,9 +355,13 @@ def chat_with_ai(request: ChatRequest) -> ChatResponse:
 ### Environment Variables
 
 ```bash
-# OpenAI Configuration
+# LLM Configuration
 OPENAI_API_KEY=your_api_key_here
-EMBEDDING_MODEL=text-embedding-3-small  # or text-embedding-3-large
+OPENAI_BASE_URL=                        # Leave empty for OpenAI, set for other providers
+LLM_MODEL=gpt-4o-mini                   # Language model to use
+
+# Embedding Configuration
+EMBEDDING_MODEL=text-embedding-3-small  # Embedding model for vector search
 
 # RAG Configuration
 CHUNK_SIZE=1000          # Characters per chunk
