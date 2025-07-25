@@ -9,6 +9,8 @@ A minimal RAG (Retrieval Augmented Generation) implementation for educational pu
 - 🎨 Simple HTML/CSS/JS frontend
 - 🔧 GPT-4.1 Mini integration
 
+**Created by [Davide Pasca](https://github.com/dpasca) at [NEWTYPE K.K.](https://newtypekk.com), Japan**
+
 ## Quick Setup
 
 **Option 1: Automated Setup (Recommended)**
@@ -136,8 +138,10 @@ For detailed technical documentation about the RAG implementation, see [TECHNICA
 
 - [English README](README.md)
 - [日本語 README](README_ja.md)
+- [Italiano README](README_it.md)
 - [English Technical Docs](TECHNICAL.md)
 - [日本語技術ドキュメント](TECHNICAL_ja.md)
+- [Documentazione Tecnica Italiana](TECHNICAL_it.md)
 
 ## Development
 

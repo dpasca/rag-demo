@@ -9,6 +9,8 @@
 - 🎨 シンプルなHTML/CSS/JSフロントエンド
 - 🔧 GPT-4.1 Mini統合
 
+**[NEWTYPE K.K.](https://newtypekk.com)の[Davide Pasca](https://github.com/dpasca)により開発**
+
 ## クイックセットアップ
 
 **オプション1: 自動セットアップ（推奨）**
@@ -95,7 +97,7 @@ setup.bat
 ```bash
 # Ollama（ローカル）の場合
 OPENAI_BASE_URL=http://localhost:11434/v1
-LLM_MODEL=llama2
+LLM_MODEL=llama3.1
 OPENAI_API_KEY=ollama  # Ollamaの場合は任意の値
 
 # 他のOpenAI互換APIの場合
@@ -153,5 +155,7 @@ RAGシステムの詳細な技術解説については、[TECHNICAL_ja.md](TECHN
 
 - [English README](README.md)
 - [日本語 README](README_ja.md)
+- [Italiano README](README_it.md)
 - [English Technical Docs](TECHNICAL.md)
 - [日本語技術ドキュメント](TECHNICAL_ja.md)
+- [Documentazione Tecnica Italiana](TECHNICAL_it.md)
