@@ -11,6 +11,8 @@ Un'implementazione minimale di RAG (Retrieval Augmented Generation) per scopi ed
 
 **Realizzato da [Davide Pasca](https://github.com/dpasca) presso [NEWTYPE K.K.](https://newtypekk.com), Giappone**
 
+![Screenshot RAG Demo](assets/screenshot01.png)
+
 ## Configurazione Rapida
 
 **Opzione 1: Configurazione Automatica (Consigliata)**

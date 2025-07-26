@@ -11,6 +11,8 @@ A minimal RAG (Retrieval Augmented Generation) implementation for educational pu
 
 **Created by [Davide Pasca](https://github.com/dpasca) at [NEWTYPE K.K.](https://newtypekk.com), Japan**
 
+![RAG Demo Screenshot](assets/screenshot01.png)
+
 ## Quick Setup
 
 **Option 1: Automated Setup (Recommended)**

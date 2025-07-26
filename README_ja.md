@@ -11,6 +11,8 @@
 
 **[NEWTYPE K.K.](https://newtypekk.com)の[Davide Pasca](https://github.com/dpasca)により開発**
 
+![RAGデモスクリーンショット](assets/screenshot01.png)
+
 ## クイックセットアップ
 
 **オプション1: 自動セットアップ（推奨）**
