@@ -1,0 +1,407 @@
+FastAPI Web Development Guide
+
+What is FastAPI?
+FastAPI is a modern, high-performance web framework for building APIs with Python. Created by Sebastian Ramirez, it's designed to be fast, easy to use, and provide automatic API documentation. FastAPI is built on top of Starlette for web handling and Pydantic for data validation.
+
+Key Features:
+- High performance (comparable to NodeJS and Go)
+- Automatic API documentation with Swagger UI
+- Type hints support with automatic validation
+- Async/await support for concurrent operations
+- Built-in security and authentication features
+- Easy testing with integrated test client
+
+Getting Started with FastAPI
+
+Installation:
+```bash
+pip install fastapi uvicorn
+```
+
+Basic Application:
+```python
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/")
+def read_root():
+    return {"message": "Hello World"}
+
+@app.get("/items/{item_id}")
+def read_item(item_id: int, q: str = None):
+    return {"item_id": item_id, "q": q}
+```
+
+Running the Application:
+```bash
+uvicorn main:app --reload
+```
+
+This starts the server at http://localhost:8000 with auto-reload for development.
+
+Request and Response Models
+FastAPI uses Pydantic models for request/response validation:
+
+```python
+from pydantic import BaseModel
+from typing import Optional
+
+class Item(BaseModel):
+    name: str
+    description: Optional[str] = None
+    price: float
+    tax: Optional[float] = None
+
+@app.post("/items/")
+def create_item(item: Item):
+    return {"message": f"Created item: {item.name}"}
+```
+
+Benefits of Pydantic Models:
+- Automatic request validation
+- Clear API documentation
+- Type safety and IDE support
+- Serialization/deserialization
+- Error handling with detailed messages
+
+Path Parameters and Query Parameters
+
+Path Parameters:
+```python
+@app.get("/users/{user_id}")
+def get_user(user_id: int):
+    return {"user_id": user_id}
+```
+
+Query Parameters:
+```python
+@app.get("/items/")
+def list_items(skip: int = 0, limit: int = 10):
+    return {"skip": skip, "limit": limit}
+```
+
+Optional and Required Parameters:
+```python
+from typing import Optional
+
+@app.get("/items/{item_id}")
+def get_item(item_id: int, q: Optional[str] = None, required_param: str):
+    return {"item_id": item_id, "q": q, "required": required_param}
+```
+
+HTTP Methods and Status Codes
+
+Common HTTP Methods:
+```python
+@app.get("/items/")      # Retrieve data
+@app.post("/items/")     # Create new data
+@app.put("/items/{id}")  # Update existing data
+@app.delete("/items/{id}") # Delete data
+@app.patch("/items/{id}") # Partial update
+```
+
+Custom Status Codes:
+```python
+from fastapi import status
+
+@app.post("/items/", status_code=status.HTTP_201_CREATED)
+def create_item(item: Item):
+    return item
+
+@app.get("/items/{item_id}", status_code=200)
+def get_item(item_id: int):
+    if item_id == 404:
+        raise HTTPException(status_code=404, detail="Item not found")
+    return {"item_id": item_id}
+```
+
+Error Handling
+FastAPI provides excellent error handling capabilities:
+
+```python
+from fastapi import HTTPException
+
+@app.get("/items/{item_id}")
+def get_item(item_id: int):
+    if item_id < 1:
+        raise HTTPException(
+            status_code=400,
+            detail="Item ID must be positive"
+        )
+    return {"item_id": item_id}
+```
+
+Custom Exception Handlers:
+```python
+from fastapi import Request
+from fastapi.responses import JSONResponse
+
+class CustomException(Exception):
+    def __init__(self, name: str):
+        self.name = name
+
+@app.exception_handler(CustomException)
+async def custom_exception_handler(request: Request, exc: CustomException):
+    return JSONResponse(
+        status_code=418,
+        content={"message": f"Custom error: {exc.name}"}
+    )
+```
+
+Async/Await Support
+FastAPI supports both synchronous and asynchronous operations:
+
+```python
+import asyncio
+import httpx
+
+@app.get("/sync-endpoint")
+def sync_operation():
+    # Synchronous operation
+    return {"message": "This is sync"}
+
+@app.get("/async-endpoint")
+async def async_operation():
+    # Async operation
+    async with httpx.AsyncClient() as client:
+        response = await client.get("https://api.example.com/data")
+        return response.json()
+
+@app.get("/mixed-endpoint")
+async def mixed_operation():
+    # Mix of async and sync operations
+    result1 = await some_async_function()
+    result2 = some_sync_function()
+    return {"async": result1, "sync": result2}
+```
+
+When to Use Async:
+- I/O operations (database queries, API calls)
+- File operations
+- Network requests
+- Any operation that involves waiting
+
+Dependency Injection
+FastAPI's dependency injection system enables code reuse and testing:
+
+```python
+from fastapi import Depends
+
+def get_database():
+    db = DatabaseSession()
+    try:
+        yield db
+    finally:
+        db.close()
+
+def get_current_user(token: str = Header(...)):
+    # Validate token and return user
+    return decode_token(token)
+
+@app.get("/protected/")
+def protected_route(
+    db: Session = Depends(get_database),
+    user = Depends(get_current_user)
+):
+    return {"user": user.username, "message": "Protected data"}
+```
+
+Common Dependency Patterns:
+- Database connections
+- Authentication/authorization
+- Configuration access
+- Shared business logic
+- Request validation
+
+Middleware and CORS
+Middleware processes requests before they reach route handlers:
+
+```python
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
+
+# CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Custom middleware
+@app.middleware("http")
+async def add_process_time_header(request: Request, call_next):
+    start_time = time.time()
+    response = await call_next(request)
+    process_time = time.time() - start_time
+    response.headers["X-Process-Time"] = str(process_time)
+    return response
+```
+
+Static Files and Templates
+Serving static files and HTML templates:
+
+```python
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
+
+@app.get("/page")
+def get_page(request: Request):
+    return templates.TemplateResponse(
+        "page.html",
+        {"request": request, "title": "My Page"}
+    )
+```
+
+API Documentation
+FastAPI automatically generates interactive API documentation:
+
+- Swagger UI: http://localhost:8000/docs
+- ReDoc: http://localhost:8000/redoc
+- OpenAPI JSON: http://localhost:8000/openapi.json
+
+Customizing Documentation:
+```python
+app = FastAPI(
+    title="My API",
+    description="This is my awesome API",
+    version="1.0.0",
+    contact={
+        "name": "Your Name",
+        "email": "your.email@example.com",
+    }
+)
+
+@app.get("/items/", tags=["items"], summary="List all items")
+def list_items():
+    """
+    Retrieve a list of all items with optional filtering.
+
+    - **skip**: Number of items to skip
+    - **limit**: Maximum number of items to return
+    """
+    return {"items": []}
+```
+
+Testing FastAPI Applications
+FastAPI includes a test client based on Starlette's TestClient:
+
+```python
+from fastapi.testclient import TestClient
+
+client = TestClient(app)
+
+def test_read_main():
+    response = client.get("/")
+    assert response.status_code == 200
+    assert response.json() == {"message": "Hello World"}
+
+def test_create_item():
+    response = client.post(
+        "/items/",
+        json={"name": "Test Item", "price": 10.0}
+    )
+    assert response.status_code == 201
+    assert response.json()["name"] == "Test Item"
+```
+
+Testing with Dependencies:
+```python
+def override_get_database():
+    return mock_database
+
+app.dependency_overrides[get_database] = override_get_database
+```
+
+Production Deployment
+Preparing FastAPI for production:
+
+```python
+# Production ASGI server
+uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4
+
+# With Gunicorn + Uvicorn workers
+gunicorn main:app -w 4 -k uvicorn.workers.UvicornWorker
+```
+
+Production Considerations:
+- Use environment variables for configuration
+- Implement proper logging
+- Set up health check endpoints
+- Configure HTTPS/TLS
+- Use reverse proxy (nginx, Apache)
+- Monitor performance and errors
+- Implement rate limiting
+
+Security Features
+FastAPI includes built-in security utilities:
+
+```python
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+
+security = HTTPBearer()
+
+@app.get("/protected")
+def protected_route(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    token = credentials.credentials
+    # Validate token
+    return {"message": "Access granted"}
+```
+
+OAuth2 with JWT:
+```python
+from fastapi.security import OAuth2PasswordBearer
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+@app.get("/protected")
+def protected_route(token: str = Depends(oauth2_scheme)):
+    # Decode and validate JWT token
+    return {"token": token}
+```
+
+FastAPI Best Practices
+
+1. Project Structure:
+```
+app/
+├── main.py          # FastAPI app instance
+├── routers/         # Route modules
+├── models/          # Pydantic models
+├── dependencies/    # Dependency injection
+├── services/        # Business logic
+└── tests/          # Test modules
+```
+
+2. Configuration Management:
+```python
+from pydantic import BaseSettings
+
+class Settings(BaseSettings):
+    database_url: str
+    secret_key: str
+
+    class Config:
+        env_file = ".env"
+
+settings = Settings()
+```
+
+3. Database Integration:
+- Use SQLAlchemy or similar ORM
+- Implement connection pooling
+- Handle database migrations
+- Use async database drivers when possible
+
+4. Error Handling:
+- Implement global exception handlers
+- Provide meaningful error messages
+- Log errors for debugging
+- Return appropriate HTTP status codes
+
+FastAPI combines the best of modern Python features with excellent performance and developer experience. Its automatic documentation, type safety, and async support make it an excellent choice for building APIs, from simple prototypes to production-scale applications.

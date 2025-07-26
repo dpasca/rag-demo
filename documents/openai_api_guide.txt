@@ -1,0 +1,240 @@
+OpenAI API and Function Calling Guide
+
+OpenAI API Overview
+The OpenAI API provides access to state-of-the-art language models including GPT-4, GPT-3.5, and embedding models. It offers a simple REST API interface that developers can use to integrate AI capabilities into their applications.
+
+Key Models Available:
+- GPT-4.1: Latest flagship model with improved reasoning
+- GPT-4.1-mini: Cost-effective version with good performance
+- GPT-3.5-turbo: Fast and efficient for many tasks
+- text-embedding-3-small/large: Convert text to numerical vectors
+- DALL-E 3: Generate images from text descriptions
+
+Authentication and Setup
+API access requires an API key that should be kept secure:
+- Store in environment variables, never in code
+- Use different keys for development and production
+- Monitor usage through the OpenAI dashboard
+- Set usage limits to prevent unexpected charges
+
+Basic Chat Completions
+The chat completions endpoint is the primary way to interact with language models:
+
+```python
+import openai
+
+response = openai.chat.completions.create(
+    model="gpt-4.1-mini",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "Explain quantum computing"}
+    ],
+    max_tokens=500,
+    temperature=0.7
+)
+```
+
+Message Roles:
+- system: Sets behavior and context for the AI
+- user: Messages from the end user
+- assistant: Responses from the AI model
+- tool: Results from function calls
+
+Function Calling (Tools)
+Function calling allows AI models to trigger external functions and use their results. This enables AI to:
+- Access real-time information
+- Perform calculations
+- Interact with databases
+- Control external systems
+
+Defining a Function:
+```python
+tools = [{
+    "type": "function",
+    "function": {
+        "name": "search_documents",
+        "description": "Search through document database",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "query": {
+                    "type": "string",
+                    "description": "Search query for documents"
+                },
+                "limit": {
+                    "type": "integer",
+                    "description": "Number of results to return"
+                }
+            },
+            "required": ["query"]
+        }
+    }
+}]
+```
+
+Function Calling Workflow:
+1. Define available functions with clear descriptions
+2. Include tools in chat completion request
+3. Model decides whether to call functions
+4. Extract function calls from response
+5. Execute functions and get results
+6. Send results back to model for final response
+
+Best Practices for Function Definitions:
+- Use clear, descriptive function names
+- Provide detailed parameter descriptions
+- Specify required vs optional parameters
+- Include examples in descriptions when helpful
+- Keep functions focused on single tasks
+
+Prompt Engineering for Function Calling
+Effective system prompts for function calling:
+
+```
+You are a helpful assistant with access to document search.
+When users ask questions that might be answered by documents,
+use the search_documents function to find relevant information.
+Always cite your sources when using retrieved information.
+```
+
+Key principles:
+- Clearly explain when to use each function
+- Provide examples of appropriate usage
+- Set expectations for citing sources
+- Handle cases where no relevant information is found
+
+Error Handling and Reliability
+
+Common API Errors:
+- Rate limiting (429): Too many requests
+- Authentication (401): Invalid API key
+- Model overload (503): Temporary service issues
+- Token limits (400): Request too long
+
+Implementing Retry Logic:
+```python
+import time
+import random
+
+def api_call_with_retry(func, max_retries=3):
+    for attempt in range(max_retries):
+        try:
+            return func()
+        except openai.RateLimitError:
+            if attempt < max_retries - 1:
+                wait_time = (2 ** attempt) + random.uniform(0, 1)
+                time.sleep(wait_time)
+            else:
+                raise
+```
+
+Cost Optimization Strategies
+
+Model Selection:
+- Use GPT-4.1-mini for most tasks (much cheaper than GPT-4.1)
+- Consider GPT-3.5-turbo for simple tasks
+- Use appropriate context lengths
+
+Token Management:
+- Monitor input and output token usage
+- Implement conversation truncation for long chats
+- Use system messages efficiently
+- Consider streaming for real-time applications
+
+Caching:
+- Cache responses for repeated queries
+- Store function results when appropriate
+- Use embedding similarity to find cached responses
+
+Advanced Features
+
+Streaming Responses:
+Process responses as they're generated for better user experience:
+```python
+stream = openai.chat.completions.create(
+    model="gpt-4.1-mini",
+    messages=messages,
+    stream=True
+)
+
+for chunk in stream:
+    if chunk.choices[0].delta.content:
+        print(chunk.choices[0].delta.content, end="")
+```
+
+Temperature and Top-p:
+- Temperature (0-2): Controls randomness
+  - 0: Deterministic, focused responses
+  - 1: Balanced creativity and consistency
+  - 2: Very creative, potentially inconsistent
+
+- Top-p (0-1): Alternative to temperature
+  - Controls diversity by probability mass
+  - Often used instead of temperature
+
+JSON Mode:
+Force structured JSON responses:
+```python
+response = openai.chat.completions.create(
+    model="gpt-4.1-mini",
+    messages=[
+        {"role": "system", "content": "Respond in JSON format"},
+        {"role": "user", "content": "List three programming languages"}
+    ],
+    response_format={"type": "json_object"}
+)
+```
+
+Working with Embeddings
+Text embeddings convert text into numerical vectors for similarity search and analysis:
+
+```python
+response = openai.embeddings.create(
+    model="text-embedding-3-small",
+    input="Text to embed"
+)
+
+embedding = response.data[0].embedding
+```
+
+Embedding Best Practices:
+- Use consistent preprocessing for documents and queries
+- Choose appropriate embedding model for your use case
+- Consider batch processing for multiple texts
+- Store embeddings efficiently in vector databases
+
+Security Considerations
+
+API Key Security:
+- Never commit API keys to version control
+- Use environment variables or secure key management
+- Rotate keys regularly
+- Implement proper access controls
+
+Input Validation:
+- Sanitize user inputs to prevent prompt injection
+- Implement rate limiting to prevent abuse
+- Validate function parameters before execution
+- Monitor for unusual usage patterns
+
+Data Privacy:
+- Understand OpenAI's data usage policies
+- Consider using local models for sensitive data
+- Implement proper data handling procedures
+- Ensure compliance with relevant regulations
+
+Integration Patterns
+
+RAG (Retrieval Augmented Generation):
+Combine language models with external knowledge sources for more accurate, up-to-date responses.
+
+Chatbots and Assistants:
+Build conversational AI with memory, context awareness, and function calling capabilities.
+
+Content Generation:
+Create articles, summaries, translations, and other text content at scale.
+
+Code Generation and Analysis:
+Generate, review, and explain code across multiple programming languages.
+
+The OpenAI API provides powerful capabilities for building AI-enhanced applications. Success depends on thoughtful prompt engineering, proper error handling, cost management, and security practices. Function calling, in particular, opens up endless possibilities for creating AI agents that can interact with external systems and provide dynamic, contextual responses.
